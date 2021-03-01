@@ -53,12 +53,14 @@
 </style>
 
 <script>
-    export let title;
-    export let subtitle;
-    export let imageUrl;
-    export let description;
-    export let address;
-    export let email;
+  import Button from '../UI/Button.svelte';
+
+  export let title;
+  export let subtitle;
+  export let imageUrl;
+  export let description;
+  export let address;
+  export let email;
 </script>
 
 <article>
@@ -74,8 +76,8 @@
         <p>{description}</p>
     </div>
     <footer>
-        <a href="mailto:{email}">Contact</a>
-        <button>Show Details</button>
-        <button>Favorite</button>
+        <Button href="mailto:{email}" caption="Contact" />
+        <Button type="button" caption="Show Details" />
+        <Button type="button" caption="Favorite" mode="outline"/>
     </footer>
 </article>
