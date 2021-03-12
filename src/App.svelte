@@ -12,7 +12,8 @@
 			description: 'dasfasfas faasf ',
 			imageUrl: 'https://i.imgur.com/lKJiT77.png',
 			address: '27th Nerd Road, 4, 24315 New York',
-			contactEmail: 'code@test.com'
+			contactEmail: 'code@test.com',
+			isFavorite: false,
 		},
 		{
 			id: 'm2',
@@ -21,7 +22,8 @@
 			description: '122 swim',
 			imageUrl: 'https://i.imgur.com/oEUksmz.png',
 			address: '29th Nerd Road, 4, 24315 New York',
-			contactEmail: 'code1@test.com'
+			contactEmail: 'code1@test.com',
+			isFavorite: false,
 		}
 	];
 
@@ -44,6 +46,18 @@
 		}
 
 		meetups = [newMeetup, ...meetups];
+	}
+
+	function toggleFavorite(event) {
+		const id = event.detail;
+		const updatedMeetup = { ...meetups.find(m => m.id === id) };
+		updatedMeetup.isFavorite = !updatedMeetup.isFavorite;
+
+		const meetupIndex = meetups.findIndex(m => m.id === id);
+		const updatedMeetups = [...meetups];
+		updatedMeetups[meetupIndex] = updatedMeetup;
+
+		meetups = updatedMeetups;
 	}
 </script>
 
@@ -73,5 +87,5 @@
 		<Button type="submit" caption="Save" />
 	</form>
 	<MeetupGrid 
-		{meetups}/>
+		{meetups} on:toggle-favorite="{toggleFavorite}"/>
 </main>

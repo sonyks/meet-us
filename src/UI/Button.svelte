@@ -1,8 +1,8 @@
 <script>
-    export let type;
-    export let caption;
-    export let href;
-    export let mode;
+    export let type = undefined;
+    export let caption = undefined;
+    export let href = undefined;
+    export let mode = undefined;
 </script>
 
 <style>
@@ -87,5 +87,5 @@ button:disabled:active {
 {#if href}
 <a {href}>{caption}</a>
 {:else}
-<button class="{mode}" {type}>{caption}</button>
+<button class="{mode}" {type} on:click>{caption}</button>
 {/if}

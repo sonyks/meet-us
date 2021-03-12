@@ -1,9 +1,9 @@
 <script>
-    export let controlType;
-    export let id;
-    export let label;
-    export let rows;
-    export let value;
+    export let controlType = undefined;
+    export let id = undefined;
+    export let label = undefined;
+    export let rows = undefined;
+    export let value = undefined;
 </script>
 
 <style>
