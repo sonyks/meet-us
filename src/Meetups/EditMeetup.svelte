@@ -3,6 +3,7 @@
 	import TextInput from '../UI/TextInput.svelte';
 	import Button from '../UI/Button.svelte';
     import Modal from '../UI/Modal.svelte';
+    import {isEmpty, notEmpty} from '../helpers/validation';
 
     let title = '';
 	let subtitle = '';
@@ -37,7 +38,7 @@
 
 <Modal title="Edit Meetup Data" on:cancel>
     <form on:submit|preventDefault="{submitForm}">
-        <TextInput id="title" controlType="text" label="Title" value={title} on:input="{(event) => title = event.target.value}"/>
+        <TextInput id="title" controlType="text" label="Title" value={title} valid={notEmpty(title)} validityMessage="Please enter a valid title" on:input="{(event) => title = event.target.value}"/>
         <TextInput id="subtitle" controlType="text" label="Subtitle" value={subtitle} on:input="{(event) => subtitle = event.target.value}"/>	
         <TextInput id="address" controlType="text" label="Address" value={address} on:input="{(event) => address = event.target.value}"/>
         <TextInput id="imageUrl" controlType="text" label="Image URL" value={imageUrl} on:input="{(event) => imageUrl = event.target.value}"/>	
