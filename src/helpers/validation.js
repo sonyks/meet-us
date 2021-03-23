@@ -5,3 +5,7 @@ export function notEmpty(val) {
 export function isEmpty(val) {
     return !notEmpty();
 }
+
+export function isValidEmail(val) {
+    return !notEmpty() && val.includes('@');
+}
