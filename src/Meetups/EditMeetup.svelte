@@ -11,8 +11,16 @@
 	let email = '';
 	let description = '';
 	let imageUrl = '';
+    let formIsValid = false;
 
     const dispatch = createEventDispatcher();
+
+    $: formIsValid = notEmpty(title) 
+        && notEmpty(subtitle) 
+        && notEmpty(address)
+        && isValidEmail(email)
+        && notEmpty(description)
+        && notEmpty(imageUrl);
 
     function submitForm() {
         dispatch('save', {
@@ -51,7 +59,7 @@
             label="Subtitle" 
             value={subtitle} 
             on:input="{(event) => subtitle = event.target.value}"
-            valid={notEmpty(submitForm)} 
+            valid={notEmpty(subtitle)} 
             validityMessage="Please enter a valid subtitle"/>	
         <TextInput id="address" 
             controlType="text" 
@@ -85,6 +93,6 @@
 
     <div slot="footer">
         <Button type="button" mode="outline" on:click={cancel}>Cancel</Button>
-        <Button type="button" on:click={submitForm}>Save</Button>
+        <Button type="button" on:click={submitForm} disabled={!formIsValid}>Save</Button>
     </div>
 </Modal>

@@ -61,7 +61,7 @@ label {
 {:else}
     <input type="text" class:invalid="{!valid && touched}" {id} {value} on:input on:blur="{() => touched = true}"/>
 {/if}
-  {#if validityMessage && !valid && touched}
-    <p class="error-message">{{validityMessage}}</p>
-  {/if}
+{#if validityMessage && !valid && touched}
+  <p class="error-message">{validityMessage}}</p>
+{/if}
 </div>
