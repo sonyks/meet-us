@@ -4,6 +4,7 @@
 	import Button from '../UI/Button.svelte';
     import Modal from '../UI/Modal.svelte';
     import {notEmpty, isValidEmail} from '../helpers/validation';
+    import meetups from './meetups-store';
 
     let title = '';
 	let subtitle = '';
@@ -23,14 +24,18 @@
         && notEmpty(imageUrl);
 
     function submitForm() {
-        dispatch('save', {
-            title: title,
-            subtitle: subtitle,
-            address: address,
-            email: email,
-            description: description,
-            imageUrl: imageUrl
-        });
+        const newMeetup = {
+			title,
+			subtitle,
+			description,
+			imageUrl,
+			address,
+			contactEmail: email
+		}
+
+		meetups.addMeetup(newMeetup);
+
+        dispatch('save');
     }
 
     function cancel() {
