@@ -3,35 +3,12 @@
 	import MeetupGrid from './Meetups/MeetupGrid.svelte';
 	import EditMeetup from "./Meetups/EditMeetup.svelte";
 	import Button from './UI/Button.svelte';
-
-	let meetups = [
-		{
-			id: 'm1',
-			title: 'Coding Bootcamp',
-			subtitle: 'Learn to code in 2 hours',
-			description: 'dasfasfas faasf ',
-			imageUrl: 'https://i.imgur.com/lKJiT77.png',
-			address: '27th Nerd Road, 4, 24315 New York',
-			contactEmail: 'code@test.com',
-			isFavorite: false,
-		},
-		{
-			id: 'm2',
-			title: 'Swim Together',
-			subtitle: 'Let\'s have some swimming',
-			description: '122 swim',
-			imageUrl: 'https://i.imgur.com/oEUksmz.png',
-			address: '29th Nerd Road, 4, 24315 New York',
-			contactEmail: 'code1@test.com',
-			isFavorite: false,
-		}
-	];
+	import meetups from './Meetups/meetups-store';
 
 	let editMode = undefined;
 
 	function addMeetup(event) {
 		const newMeetup = {
-			id: Math.random().toString(),
 			title: event.detail.title,
 			subtitle: event.detail.subtitle,
 			description: event.detail.description,
@@ -40,20 +17,13 @@
 			contactEmail: event.detail.email
 		}
 
-		meetups = [newMeetup, ...meetups];
+		meetups.addMeetup(newMeetup);
 		editMode = null;
 	}
 
 	function toggleFavorite(event) {
 		const id = event.detail;
-		const updatedMeetup = { ...meetups.find(m => m.id === id) };
-		updatedMeetup.isFavorite = !updatedMeetup.isFavorite;
-
-		const meetupIndex = meetups.findIndex(m => m.id === id);
-		const updatedMeetups = [...meetups];
-		updatedMeetups[meetupIndex] = updatedMeetup;
-
-		meetups = updatedMeetups;
+		meetups.toggleFavorite(id);
 	}
 
 	function cancelEdit() {
@@ -81,5 +51,5 @@
 		<EditMeetup on:save="{addMeetup}" on:cancel={cancelEdit}/>
 	{/if}
 	<MeetupGrid 
-		{meetups} on:toggle-favorite="{toggleFavorite}"/>
+		meetups={$meetups} on:toggle-favorite="{toggleFavorite}"/>
 </main>
