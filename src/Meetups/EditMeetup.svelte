@@ -6,6 +6,8 @@
     import {notEmpty, isValidEmail} from '../helpers/validation';
     import meetups from './meetups-store';
 
+    export let id = null;
+
     let title = '';
 	let subtitle = '';
 	let address = '';
@@ -13,6 +15,20 @@
 	let description = '';
 	let imageUrl = '';
     let formIsValid = false;
+
+    if (id) {
+        const unsubscribe = meetups.subscribe(items => {
+            const selectedMeetup = items.find(i => i.id === id);
+            title = selectedMeetup.title;
+            subtitle = selectedMeetup.subtitle;
+            address = selectedMeetup.address;
+            email = selectedMeetup.contactEmail;
+            description = selectedMeetup.description;
+            imageUrl = selectedMeetup.imageUrl;
+        });
+
+        unsubscribe();
+    }
 
     const dispatch = createEventDispatcher();
 
@@ -24,7 +40,7 @@
         && notEmpty(imageUrl);
 
     function submitForm() {
-        const newMeetup = {
+        const meetupData = {
 			title,
 			subtitle,
 			description,
@@ -33,7 +49,11 @@
 			contactEmail: email
 		}
 
-		meetups.addMeetup(newMeetup);
+        if (id) {
+            meetups.updateMeetup(id, meetupData);
+        } else {
+            meetups.addMeetup(meetupData);
+        }	
 
         dispatch('save');
     }

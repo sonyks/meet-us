@@ -17,6 +17,8 @@
     const dispatch = createEventDispatcher();
 
 </script>
+  
+<style>
 section {
     margin-top: 4rem;
   }
@@ -56,10 +58,8 @@ section {
   p {
     font-size: 1.5rem;
   }
-  
-<style>
-
 </style>
+
 <section>
     <div class="image">
         <img src="{selectedMeetup.imageUrl}" alt="{selectedMeetup.title}" />
