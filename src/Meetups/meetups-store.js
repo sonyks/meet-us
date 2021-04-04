@@ -38,7 +38,7 @@ const customMeetupsStore = {
     updateMeetup: (id, meetupData) => {
         meetups.update(items => {
             const meetupIndex = items.findIndex(i => i.id === id);
-            const updatedMeetup = { ...items[meetupIndex], meetupData };
+            const updatedMeetup = { ...items[meetupIndex], ...meetupData };
             const updatedMeetups = [...items];
             updatedMeetups[meetupIndex] = updatedMeetup;
 
