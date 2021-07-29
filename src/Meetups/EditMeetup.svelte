@@ -52,7 +52,26 @@
         if (id) {
             meetups.updateMeetup(id, meetupData);
         } else {
-            meetups.addMeetup(meetupData);
+            fetch("https://svelte-course-f4db3-default-rtdb.europe-west1.firebasedatabase.app/meetups.json", {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({...meetupData, isFavorite: false}),
+            }).then(res => {
+                if (!res.ok) {
+                    throw new Error('An error occured, please try again');
+                }
+                return res.json();
+            })
+            .then(data => {
+                meetups.addMeetup({
+                        ...meetupData,
+                        isFavorite: false,
+                        id: data.name,
+                    });
+            })
+            .catch(err => {
+                console.log(err);
+            });
         }	
 
         dispatch('save');

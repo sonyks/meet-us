@@ -3,8 +3,8 @@
 	import MeetupGrid from './Meetups/MeetupGrid.svelte';
 	import EditMeetup from "./Meetups/EditMeetup.svelte";
 	import MeetupDetail from "./Meetups/MeetupDetail.svelte";
-	import Button from './UI/Button.svelte';
 	import meetups from './Meetups/meetups-store';
+	import { onMount } from 'svelte';
 
 	let editMode = undefined;
 	let editedId = undefined;
@@ -34,6 +34,29 @@
 		editMode = 'edit';
 		editedId = event.detail;
 	}
+
+	onMount(() => {
+		fetch("https://svelte-course-f4db3-default-rtdb.europe-west1.firebasedatabase.app/meetups.json")
+		.then(res => {
+                if (!res.ok) {
+                    throw new Error('Fetching meetups failed, please try again');
+                }
+                return res.json();
+		})
+		.then(data => {
+			const loadedMeetups = [];
+			for (const key in data) {
+				loadedMeetups.push({
+					...data[key],
+					id: key,
+				});
+			}
+			meetups.setMeetups(loadedMeetups);
+		})
+		.catch(err => {
+			console.log(err);
+		})
+	});
 </script>
 
 <style>
