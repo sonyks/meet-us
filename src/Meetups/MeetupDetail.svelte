@@ -7,8 +7,8 @@
     let selectedMeetup;
 
     const unsubscribe = meetups.subscribe(items => {
-        selectedMeetup = items.find(i => i.id === id);
-    })
+      selectedMeetup = items.find(i => i.id === id);
+    });
 
     onDestroy(() => {
         unsubscribe();

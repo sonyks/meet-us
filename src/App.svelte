@@ -1,5 +1,7 @@
 <script>
 	import Header from './UI/Header.svelte';
+	import LoadingSpinner from './UI/LoadingSpinner.svelte';
+	import Error from './UI/Error.svelte';
 	import MeetupGrid from './Meetups/MeetupGrid.svelte';
 	import EditMeetup from "./Meetups/EditMeetup.svelte";
 	import MeetupDetail from "./Meetups/MeetupDetail.svelte";
@@ -10,6 +12,8 @@
 	let editedId = undefined;
 	let page = 'overview';
 	let pageData = {};
+	let isLoading = false;
+	let error;
 
 	function saveMeetup() {
 		editMode = null;
@@ -35,7 +39,12 @@
 		editedId = event.detail;
 	}
 
+	function clearError() {
+		error = null;
+	}
+
 	onMount(() => {
+		isLoading = true;
 		fetch("https://svelte-course-f4db3-default-rtdb.europe-west1.firebasedatabase.app/meetups.json")
 		.then(res => {
                 if (!res.ok) {
@@ -44,6 +53,7 @@
                 return res.json();
 		})
 		.then(data => {
+			isLoading = false;
 			const loadedMeetups = [];
 			for (const key in data) {
 				loadedMeetups.push({
@@ -51,9 +61,11 @@
 					id: key,
 				});
 			}
-			meetups.setMeetups(loadedMeetups);
+			meetups.setMeetups(loadedMeetups.reverse());
 		})
 		.catch(err => {
+			error = err;
+			isLoading = false;
 			console.log(err);
 		})
 	});
@@ -63,17 +75,25 @@
 	main {
 		margin-top: 5rem;
 	}
-
 </style>
+
+{#if error}
+	<Error message={error.message} on:cancel={clearError}/>
+{/if}
+
 
 <Header />
 
 <main>
 	{#if page === 'overview'}
 	  {#if editMode === 'edit'}
-		<EditMeetup on:save={saveMeetup} on:cancel={cancelEdit} />
+		<EditMeetup id={editedId} on:save={saveMeetup} on:cancel={cancelEdit} />
 	  {/if}
-	  <MeetupGrid meetups={$meetups} on:show-details={showDetails} on:edit={startEdit} on:add={() => editMode = 'edit'}/>
+	  {#if isLoading}
+		<LoadingSpinner />
+	  {:else}
+	  	<MeetupGrid meetups={$meetups} on:show-details={showDetails} on:edit={startEdit} on:add={() => editMode = 'edit'}/>
+	{/if}
 	{:else}
 	  <MeetupDetail id={pageData.id} on:close={closeDetails} />
 	{/if}
